@@ -2,8 +2,8 @@ package org.denhez.pdf.util;
 
 public class Pair <T,U>{
 
-    private T first;
-    private U second;
+    private final T first;
+    private final U second;
 
     private Pair(T t, U u) {
         this.first = t;

@@ -1,4 +1,4 @@
-package org.denhez.pdf.reader;
+package org.denhez.pdf.tool.reader;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
@@ -7,9 +7,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.IOException;
 
-public class PdfReaderImpl implements PdfReader {
-
-    @Override
+public class PdfReader {
     public String read(String path) throws IOException {
         try (PDDocument document = Loader.loadPDF(new RandomAccessReadBufferedFile(path)))
         {

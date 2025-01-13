@@ -1,4 +1,4 @@
-package org.denhez.pdf.reader.tool.pruner;
+package org.denhez.pdf.tool.explorer;
 
 import org.denhez.pdf.util.Pair;
 
@@ -7,7 +7,7 @@ import java.util.Deque;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public class TextPruner implements Pruner<Deque<String>, String> {
+public class TextExplorer implements Explorer<Deque<String>, String> {
 
     /**
      * Prune text in order until it founds search
@@ -16,12 +16,12 @@ public class TextPruner implements Pruner<Deque<String>, String> {
      * @return the remaining text
      */
     @Override
-    public Pair<Deque<String>, String> prune(Deque<String> textQueue, Predicate<String> delimiter) {
-        return prune(textQueue, delimiter, 1, "");
+    public Pair<Deque<String>, String> explore(Deque<String> textQueue, Predicate<String> delimiter) {
+        return explore(textQueue, delimiter, 1, "");
     }
 
     @Override
-    public Pair<Deque<String>, String> prune(Deque<String> textQueue, Predicate<String> delimiter, int chunk, String chunkSeparator) {
+    public Pair<Deque<String>, String> explore(Deque<String> textQueue, Predicate<String> delimiter, int chunk, String chunkSeparator) {
         while(!textQueue.isEmpty()) {
             StringBuilder current = new StringBuilder(textQueue.poll());
             Deque<String> copy = new ArrayDeque<>(textQueue);
@@ -36,7 +36,7 @@ public class TextPruner implements Pruner<Deque<String>, String> {
     }
 
     @Override
-    public Pair<Deque<String>, String> prune(Deque<String> textQueue, int leap) {
+    public Pair<Deque<String>, String> explore(Deque<String> textQueue, int leap) {
         if (textQueue.isEmpty()) {
             return Pair.of(new ArrayDeque<>(), "end");
         }
@@ -51,13 +51,13 @@ public class TextPruner implements Pruner<Deque<String>, String> {
     }
 
     @Override
-    public Pair<Deque<String>, String> prune(Deque<String> textQueue, int leap, UnaryOperator<String> uo) {
-        var prune = prune(textQueue, leap);
-        return Pair.of(prune.getFirst(), uo.apply(prune.getSecond()));
+    public Pair<Deque<String>, String> explore(Deque<String> textQueue, int leap, UnaryOperator<String> uo) {
+        var explore = explore(textQueue, leap);
+        return Pair.of(explore.getFirst(), uo.apply(explore.getSecond()));
     }
 
     @Override
-    public Pair<Deque<String>, String> prune(Deque<String> textQueue, int leap, int chunk, String chunkSeparator) {
+    public Pair<Deque<String>, String> explore(Deque<String> textQueue, int leap, int chunk, String chunkSeparator) {
         if (textQueue.isEmpty()) {
             return Pair.of(new ArrayDeque<>(), "end");
         }
