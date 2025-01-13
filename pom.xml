@@ -1,0 +1,18 @@
+<project>
+
+    <properties>
+        <maven.compiler.target>23</maven.compiler.target>
+        <maven.compiler.source>23</maven.compiler.source>
+    </properties>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.denhez</groupId>
+    <artifactId>trconverter</artifactId>
+    <version>1</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+    </dependencies>
+</project>
