@@ -15,14 +15,14 @@ import java.util.Deque;
 public class Main {
     public static void main(String[] args) throws IOException {
         PdfReader pdfReader = new PdfReader();
-        Explorer<Deque<String>, String> textPruner = new TextExplorer();
+        Explorer<String> explorer = new TextExplorer();
 
         var pdfText = pdfReader.read("/Users/pauldenhez/Downloads/Relevé de compte.pdf");
 
         Deque<String> pdfAsDeque = new ArrayDeque<>(Arrays.asList(pdfText.split("\n")));
-        TransactionCollector prunerCollector = new TransactionCollector(textPruner, pdfAsDeque);
+        TransactionCollector transactionCollector = new TransactionCollector(explorer, pdfAsDeque);
 
-        var transactions = prunerCollector.exploreAndCollect();
+        var transactions = transactionCollector.exploreAndCollect();
         CSVMaker csvMaker = new CSVMaker();
         csvMaker.makeCSV(transactions, "/Users/pauldenhez/Downloads/relevédecompte.csv", ';');
     }

@@ -12,9 +12,9 @@ import java.util.regex.Pattern;
 
 public class TransactionCollector {
     final Deque<String> textDeque;
-    Explorer<Deque<String>, String> explorer;
+    Explorer<String> explorer;
 
-    public TransactionCollector(Explorer<Deque<String>, String> explorer, Deque<String> textDeque) {
+    public TransactionCollector(Explorer<String> explorer, Deque<String> textDeque) {
         this.explorer = explorer;
         this.textDeque = textDeque;
     }

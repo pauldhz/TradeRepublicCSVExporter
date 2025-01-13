@@ -7,14 +7,8 @@ import java.util.Deque;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public class TextExplorer implements Explorer<Deque<String>, String> {
+public class TextExplorer implements Explorer<String> {
 
-    /**
-     * Prune text in order until it founds search
-     * @param textQueue the text to prune
-     * @param delimiter the delimiter
-     * @return the remaining text
-     */
     @Override
     public Pair<Deque<String>, String> explore(Deque<String> textQueue, Predicate<String> delimiter) {
         return explore(textQueue, delimiter, 1, "");
@@ -74,5 +68,4 @@ public class TextExplorer implements Explorer<Deque<String>, String> {
         }
         return Pair.of(textQueue, current.toString());
     }
-
 }
