@@ -37,9 +37,12 @@ public abstract class Transaction {
     public BigDecimal getAmount() {
         return this.amount;
     }
-
     public String getLabel() {
         return label;
+    }
+
+    public String getTypeExportLabel() {
+        return type.getExportLabel();
     }
 
     @Override

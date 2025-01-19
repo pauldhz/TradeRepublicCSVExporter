@@ -3,21 +3,28 @@ package org.denhez.pdf.domain;
 import java.util.Arrays;
 
 public enum TransactionType {
-    VIREMENT("Virement "),
-    TRANSACTION_BY_CARD("Transaction "),
-    INTEREST_PAYMENT("Paiement "),
-    COMMERCIAL("Commerce"),
-    BONUS("Bonus"),
-    NOT_FOUND("Undefined");
+    VIREMENT("Virement ", "Virement"),
+    TRANSACTION_BY_CARD("Transaction ", "Transaction"),
+    INTEREST_PAYMENT("Paiement ", "Paiement"),
+    COMMERCIAL("Commerce", "Commerce"),
+    BONUS("Bonus", "Bonus"),
+    NOT_FOUND("Undefined", "Undefined");
 
-    private String pdfLabel;
+    private final String pdfLabel;
 
-    TransactionType(String pdfLabel) {
+    private final String exportLabel;
+
+    TransactionType(String pdfLabel, String exportLabel) {
         this.pdfLabel = pdfLabel;
+        this.exportLabel = exportLabel;
     }
 
     public String getPdfLabel() {
         return pdfLabel;
+    }
+
+    public String getExportLabel() {
+        return exportLabel;
     }
 
     public static TransactionType from(final String pdfLabel) {

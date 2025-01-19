@@ -13,12 +13,13 @@ public class CSVMaker {
 
     public void makeCSV(List<Transaction> transactions, String destination, char separator) throws IOException {
         FileWriter myWriter = new FileWriter(destination);
-        var header = buildRow(separator, "date", "libellé", "montant", LINE_BREAK);
+        var header = buildRow(separator, "date", "type", "libellé", "montant", LINE_BREAK);
         myWriter.write(header);
         for (Transaction transaction : transactions) {
             if (transaction instanceof Credit || transaction instanceof Debit) {
                 var row = buildRow(separator,
                         transaction.getDate().toString(),
+                        transaction.getTypeExportLabel(),
                         transaction.getLabel(),
                         transaction.getAmount().toString(),
                         "\n");
