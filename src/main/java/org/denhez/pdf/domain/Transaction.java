@@ -8,6 +8,7 @@ public abstract class Transaction {
     protected TransactionType type;
     protected BigDecimal amount;
     protected String label;
+    protected boolean positiveAmount;
 
     public Transaction() {}
 
@@ -35,7 +36,7 @@ public abstract class Transaction {
         return date;
     }
     public BigDecimal getAmount() {
-        return this.amount;
+        return this.positiveAmount ? this.amount : this.amount.negate();
     }
     public String getLabel() {
         return label;
