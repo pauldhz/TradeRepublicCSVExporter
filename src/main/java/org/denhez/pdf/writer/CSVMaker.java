@@ -6,19 +6,21 @@ import org.denhez.pdf.domain.Transaction;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class CSVMaker {
     protected static final String LINE_BREAK = "\n";
 
     public void makeCSV(List<Transaction> transactions, String destination, char separator) throws IOException {
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
         FileWriter myWriter = new FileWriter(destination);
         var header = buildRow(separator, "date", "type", "libellé", "montant", LINE_BREAK);
         myWriter.write(header);
         for (Transaction transaction : transactions) {
             if (transaction instanceof Credit || transaction instanceof Debit) {
                 var row = buildRow(separator,
-                        transaction.getDate().toString(),
+                        outputFormat.format(transaction.getDate()),
                         transaction.getTypeExportLabel(),
                         transaction.getLabel(),
                         transaction.getAmount().toString(),
