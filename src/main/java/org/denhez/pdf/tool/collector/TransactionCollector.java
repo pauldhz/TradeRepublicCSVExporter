@@ -33,7 +33,7 @@ public class TransactionCollector {
             Transaction transaction = switch (type.getSecond()) {
                 case "Paiement " -> {
                     var labelAmount = explorer.explore(this.textDeque, 2).getSecond();
-                    var matcher = extractLabelFromAmount(labelAmount);
+                    var matcher = extractLabelAndAmount(labelAmount);
                     if (matcher.find()) {
                         var label = matcher.group(1).trim();
                         var amount = matcher.group(2);
@@ -48,7 +48,7 @@ public class TransactionCollector {
 
                 case "Transaction " -> {
                     var labelAmount = explorer.explore(this.textDeque, 2).getSecond();
-                    var matcher = extractLabelFromAmount(labelAmount);
+                    var matcher = extractLabelAndAmount(labelAmount);
                     if (matcher.find()) {
                         var label = matcher.group(1).trim();
                         var amount = matcher.group(2);
@@ -73,7 +73,7 @@ public class TransactionCollector {
                 }
                 case "Intérêts ", "Bonus " -> {
                     var label = explorer.explore(this.textDeque, 1).getSecond();
-                    var matcher = extractLabelFromAmount(explorer.explore(this.textDeque,1).getSecond());
+                    var matcher = extractLabelAndAmount(explorer.explore(this.textDeque,1).getSecond());
                     var amount = matcher.find() ? matcher.group(2) : "";
 
                     yield new Debit()
@@ -85,7 +85,7 @@ public class TransactionCollector {
 
                 case "Exécution " -> {
                     var label = explorer.explore(this.textDeque, 3).getSecond();
-                    var matcher = extractLabelFromAmount(explorer.explore(this.textDeque,1).getSecond());
+                    var matcher = extractLabelAndAmount(explorer.explore(this.textDeque,1).getSecond());
                     var amount = matcher.find() ? extractAmount(matcher.group(0).split(" ")[0]) : "0,00";
 
                     yield new Debit()
@@ -131,7 +131,7 @@ public class TransactionCollector {
         }
     }
 
-    private Matcher extractLabelFromAmount(String labelAmount) {
+    private Matcher extractLabelAndAmount(String labelAmount) {
         Pattern pattern = Pattern.compile("^(.*?)(\\d{1,7}(?:[.,]\\d{2})?)\\s*[\\u00A0\\u0020]?€");
         return pattern.matcher(labelAmount);
     }
