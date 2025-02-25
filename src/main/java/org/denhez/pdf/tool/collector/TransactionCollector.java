@@ -61,9 +61,33 @@ public class TransactionCollector {
                     }
                     yield new Other().label("Failed transaction : " + labelAmount).date(date);
                 }
+
                 case "Commerce" -> {
                     var label = explorer.explore(this.textDeque, 1, 2, "- ").getSecond();
                     var amount = explorer.explore(this.textDeque, 2, x -> x.substring(0, x.length() - 2)).getSecond();
+                    yield new Debit()
+                            .type(TransactionType.from(type.getSecond()))
+                            .date(date)
+                            .label(label)
+                            .amount(new BigDecimal(amount.replace(',', '.')));
+                }
+                case "Intérêts ", "Bonus " -> {
+                    var label = explorer.explore(this.textDeque, 1).getSecond();
+                    var matcher = extractLabelFromAmount(explorer.explore(this.textDeque,1).getSecond());
+                    var amount = matcher.find() ? matcher.group(2) : "";
+
+                    yield new Debit()
+                            .type(TransactionType.from(type.getSecond()))
+                            .date(date)
+                            .label(label)
+                            .amount(new BigDecimal(amount.replace(',', '.')));
+                }
+
+                case "Exécution " -> {
+                    var label = explorer.explore(this.textDeque, 3).getSecond();
+                    var matcher = extractLabelFromAmount(explorer.explore(this.textDeque,1).getSecond());
+                    var amount = matcher.find() ? extractAmount(matcher.group(0).split(" ")[0]) : "0,00";
+
                     yield new Debit()
                             .type(TransactionType.from(type.getSecond()))
                             .date(date)
@@ -108,7 +132,21 @@ public class TransactionCollector {
     }
 
     private Matcher extractLabelFromAmount(String labelAmount) {
-        Pattern pattern = Pattern.compile("^(.*?)(\\d{1,3}(?:[.,]\\d{2})?)\\s*[\\u00A0\\u0020]?€");
+        Pattern pattern = Pattern.compile("^(.*?)(\\d{1,7}(?:[.,]\\d{2})?)\\s*[\\u00A0\\u0020]?€");
         return pattern.matcher(labelAmount);
+    }
+
+    /**
+     * Extract amount of a currency. Ex: 15,00 € -> 15,00
+     * @param amount with currency
+     * @return amount, null if not match
+     */
+    private String extractAmount(String amount) {
+        Pattern pattern = Pattern.compile("(\\d{1,7}(?:[.,]\\d{2})?)");
+        var matcher = pattern.matcher(amount);
+        if(matcher.find()) {
+            return matcher.group(0);
+        }
+        return null;
     }
 }
