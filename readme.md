@@ -1,6 +1,7 @@
 # Trade Republic PDF to CSV
-## Description
+## Export your Trade Republic portfolio in CSV
 This app allow you to convert your Trade Republic PDF bank statement into CSV.
+This Trade Republic CSV export app browse your PDF bank statement to extract all your transactions and make a CSV.
 
 ## Usage
 ### Requirement
