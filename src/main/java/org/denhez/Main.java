@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.denhez.pdf.domain.Transaction.parseAvoir;
+import static org.denhez.pdf.domain.Transaction.parseBonus;
 
 
 public class Main {
@@ -34,7 +35,10 @@ public class Main {
         Iterator<String> pdfIterator = Arrays.asList(pdfText.split("\n")).iterator();
         final List<Transaction> transactions = new ArrayList<>();
         while (pdfIterator.hasNext()) {
-            parseAvoir(pdfIterator.next()).map(transactions::add);
+            String row = pdfIterator.next();
+            parseAvoir(row)
+                .or(() -> parseBonus(row))
+                .map(transactions::add);
         }
 
         System.out.println(transactions.size());

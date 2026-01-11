@@ -31,7 +31,24 @@ public interface Transaction {
     }
 
     static Optional<Transaction> parseBonus(String row) {
-        return null;
+        if (row == null || !row.startsWith("Bonus")) {
+            return Optional.empty();
+        }
+
+        String[] parts = row.split(" ");
+        if (parts.length < NB_COLUMNS_FOR_ROW) {
+            return Optional.empty();
+        }
+
+        String montantStr = parts[parts.length - AMOUNT_INDEX].replace(",", ".");
+
+        try {
+            PositiveAmount amount = PositiveAmount.parse(montantStr);
+            TransactionInfo info = new TransactionInfo(amount, TransactionType.CREDIT);
+            return Optional.of(new Bonus(info));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     static Optional<Transaction> parseInterets(String row) {
