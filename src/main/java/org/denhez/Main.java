@@ -39,6 +39,7 @@ public class Main {
                 .or(() -> parseBonus(row))
                 .or(() -> parseInterets(row))
                 .or(() -> parseExecutionOrdre(row, pdfIterator::next))
+                .or(() -> parseVirement(row, pdfIterator::next))
                 .map(transactions::add);
         }
 

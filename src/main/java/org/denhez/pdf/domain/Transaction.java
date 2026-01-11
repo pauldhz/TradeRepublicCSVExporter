@@ -29,18 +29,15 @@ public interface Transaction {
         }
 
         try {
-            // Lire la ligne suivante "d'ordre"
             String nextLine = nextLineSupplier.get();
             if (nextLine == null || !nextLine.equals("d'ordre")) {
                 return Optional.empty();
             }
 
-            // Lire les lignes de description jusqu'à trouver la ligne avec les montants
             String line;
             while ((line = nextLineSupplier.get()) != null) {
                 String[] parts = line.split(" ");
 
-                // On cherche une ligne avec exactement 4 parties: montant, €, solde, €
                 if (parts.length == 4 && parts[1].equals("€") && parts[3].equals("€")) {
                     String montantStr = parts[0].replace(",", ".");
                     PositiveAmount amount = PositiveAmount.parse(montantStr);
@@ -55,8 +52,33 @@ public interface Transaction {
         }
     }
 
-    static Optional<Transaction> parseVirement(String row) {
-        return null;
+    static Optional<Transaction> parseVirement(String row, Supplier<String> nextLineSupplier) {
+        if (row == null || !row.startsWith("Virement")) {
+            return Optional.empty();
+        }
+
+        try {
+            if (!row.trim().equals("Virement")) {
+                return parseTransaction(row, "Virement", TransactionType.CREDIT, Virement::new);
+            }
+
+            String line;
+            while ((line = nextLineSupplier.get()) != null) {
+                line = line.trim();
+
+                if (line.matches("^\\d+,\\d+ € \\d+,\\d+ €$")) {
+                    String[] parts = line.split(" ");
+                    String montantStr = parts[0].replace(",", ".");
+                    PositiveAmount amount = PositiveAmount.parse(montantStr);
+                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT);
+                    return Optional.of(new Virement(info));
+                }
+            }
+
+            return Optional.empty();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     private static Optional<Transaction> parseTransaction(String row, String prefix, TransactionType type, Function<TransactionInfo,Transaction> factory) {
