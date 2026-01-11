@@ -1,10 +1,9 @@
 package org.denhez;
 
-import org.denhez.pdf.tool.explorer.Explorer;
-import org.denhez.pdf.tool.collector.TransactionCollector;
-import org.denhez.pdf.tool.explorer.TextExplorer;
+import org.denhez.pdf.domain.TransactionInfo;
+import org.denhez.pdf.domain.TransactionType;
+import org.denhez.pdf.domain.vo.PositiveAmount;
 import org.denhez.pdf.tool.reader.PdfReader;
-import org.denhez.pdf.writer.CSVMaker;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,17 +21,12 @@ public class Main {
             output = "export.csv";
         }
         PdfReader pdfReader = new PdfReader();
-        Explorer<String> explorer = new TextExplorer();
 
         var path = definePDFInput(new File("."));
         var pdfText = pdfReader.read(path);
 
         Deque<String> pdfAsDeque = new ArrayDeque<>(Arrays.asList(pdfText.split("\n")));
-        TransactionCollector transactionCollector = new TransactionCollector(explorer, pdfAsDeque);
 
-        var transactions = transactionCollector.exploreAndCollect();
-        CSVMaker csvMaker = new CSVMaker();
-        csvMaker.makeCSV(transactions, new File("").getAbsolutePath()+"/"+output, ';');
     }
 
     private static String definePDFInput(File directory) {
