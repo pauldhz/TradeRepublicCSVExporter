@@ -3,6 +3,7 @@ package org.denhez.pdf.domain;
 import org.denhez.pdf.domain.vo.PositiveAmount;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public interface Transaction {
 
@@ -10,28 +11,15 @@ public interface Transaction {
     int AMOUNT_INDEX = 4;
 
     static Optional<Transaction> parseAvoir(String row) {
-        if (row == null || !row.startsWith("Avoir")) {
-            return Optional.empty();
-        }
-
-        String[] parts = row.split(" ");
-        if (parts.length < NB_COLUMNS_FOR_ROW) {
-            return Optional.empty();
-        }
-
-        String montantStr = parts[parts.length - AMOUNT_INDEX].replace(",", ".");
-
-        try {
-            PositiveAmount amount = PositiveAmount.parse(montantStr);
-            TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT);
-            return Optional.of(new Avoir(info));
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+        return parseTransaction(row, "Avoir", TransactionType.DEBIT, Avoir::new);
     }
 
     static Optional<Transaction> parseBonus(String row) {
-        if (row == null || !row.startsWith("Bonus")) {
+        return parseTransaction(row, "Bonus", TransactionType.CREDIT, Bonus::new);
+    }
+
+    private static Optional<Transaction> parseTransaction(String row, String prefix, TransactionType type, Function<TransactionInfo,Transaction> factory) {
+        if (row == null || !row.startsWith(prefix)) {
             return Optional.empty();
         }
 
@@ -44,8 +32,8 @@ public interface Transaction {
 
         try {
             PositiveAmount amount = PositiveAmount.parse(montantStr);
-            TransactionInfo info = new TransactionInfo(amount, TransactionType.CREDIT);
-            return Optional.of(new Bonus(info));
+            TransactionInfo info = new TransactionInfo(amount, type);
+            return Optional.of(factory.apply(info));
         } catch (Exception e) {
             return Optional.empty();
         }
