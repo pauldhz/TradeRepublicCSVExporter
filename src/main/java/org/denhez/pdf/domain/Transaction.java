@@ -18,6 +18,18 @@ public interface Transaction {
         return parseTransaction(row, "Bonus", TransactionType.CREDIT, Bonus::new);
     }
 
+    static Optional<Transaction> parseInterets(String row) {
+        return parseTransaction(row, "Intérêts", TransactionType.CREDIT, Interets::new);
+    }
+
+    static Optional<Transaction> ExecutionOrdre(String row) {
+        return null;
+    }
+
+    static Optional<Transaction> parseVirement(String row) {
+        return null;
+    }
+
     private static Optional<Transaction> parseTransaction(String row, String prefix, TransactionType type, Function<TransactionInfo,Transaction> factory) {
         if (row == null || !row.startsWith(prefix)) {
             return Optional.empty();
@@ -37,17 +49,5 @@ public interface Transaction {
         } catch (Exception e) {
             return Optional.empty();
         }
-    }
-
-    static Optional<Transaction> parseInterets(String row) {
-        return null;
-    }
-
-    static Optional<Transaction> ExecutionOrdre(String row) {
-        return null;
-    }
-
-    static Optional<Transaction> parseVirement(String row) {
-        return null;
     }
 }

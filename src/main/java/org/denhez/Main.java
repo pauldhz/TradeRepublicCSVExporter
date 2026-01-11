@@ -10,8 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static org.denhez.pdf.domain.Transaction.parseAvoir;
-import static org.denhez.pdf.domain.Transaction.parseBonus;
+import static org.denhez.pdf.domain.Transaction.*;
 
 
 public class Main {
@@ -38,6 +37,7 @@ public class Main {
             String row = pdfIterator.next();
             parseAvoir(row)
                 .or(() -> parseBonus(row))
+                .or(() -> parseInterets(row))
                 .map(transactions::add);
         }
 
