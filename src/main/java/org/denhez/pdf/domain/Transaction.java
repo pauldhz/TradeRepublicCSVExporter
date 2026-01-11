@@ -12,6 +12,12 @@ public interface Transaction {
     int NB_COLUMNS_FOR_ROW = 5;
     int AMOUNT_INDEX = 4;
 
+    /**
+     * Récupère les informations de la transaction
+     * @return les informations de la transaction
+     */
+    TransactionInfo getTransactionInfo();
+
     static Optional<Transaction> parseAvoir(String row, Date operationDate) {
         return parseTransaction(row, "Avoir", TransactionType.DEBIT, Avoir::new, operationDate);
     }
@@ -25,7 +31,7 @@ public interface Transaction {
     }
 
     static Optional<Transaction> parseExecutionOrdre(String row, Supplier<String> nextLineSupplier, Date operationDate) {
-        if (row == null || !row.equals("Exécution")) {
+        if (row == null || !row.equals("Exécution ")) {
             return Optional.empty();
         }
 
@@ -81,7 +87,7 @@ public interface Transaction {
                     String montantStr = parts[0].replace(",", ".");
                     PositiveAmount amount = PositiveAmount.parse(montantStr);
                     String description = descriptionBuilder.toString().trim();
-                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT, description, operationDate);
+                    TransactionInfo info = new TransactionInfo(amount, TransactionType.CREDIT, description, operationDate);
                     return Optional.of(new Virement(info));
                 }
 

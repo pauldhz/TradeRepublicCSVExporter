@@ -6,5 +6,10 @@ public class Bonus implements Transaction {
     public Bonus(TransactionInfo transactionInfo) {
         this.transactionInfo = transactionInfo;
     }
+
+    @Override
+    public TransactionInfo getTransactionInfo() {
+        return transactionInfo;
+    }
 }
 

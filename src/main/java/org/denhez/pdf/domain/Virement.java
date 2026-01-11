@@ -6,5 +6,10 @@ public class Virement implements Transaction {
     public Virement(TransactionInfo transactionInfo) {
         this.transactionInfo = transactionInfo;
     }
+
+    @Override
+    public TransactionInfo getTransactionInfo() {
+        return transactionInfo;
+    }
 }
 

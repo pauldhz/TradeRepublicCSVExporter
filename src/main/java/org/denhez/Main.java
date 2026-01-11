@@ -1,6 +1,7 @@
 package org.denhez;
 
 import org.denhez.pdf.domain.Transaction;
+import org.denhez.pdf.tool.exporter.CsvExporter;
 import org.denhez.pdf.tool.reader.PdfReader;
 
 import java.io.File;
@@ -29,6 +30,7 @@ public class Main {
 
         // Normaliser les espaces insécables en espaces normaux
         pdfText = pdfText.replace("\u00A0", " ");
+        pdfText = pdfText.replace("null", "");
 
         Iterator<String> pdfIterator = Arrays.asList(pdfText.split("\n")).iterator();
         final List<Transaction> transactions = new ArrayList<>();
@@ -55,7 +57,20 @@ public class Main {
             lineMinus1 = row;
         }
 
-        System.out.println(transactions.size());
+        System.out.println("Nombre de transactions parsées : " + transactions.size());
+
+        // Export CSV
+        if (!transactions.isEmpty()) {
+            CsvExporter exporter = new CsvExporter();
+            try {
+                exporter.export(transactions, output);
+                System.out.println("Export CSV réussi : " + output);
+            } catch (IOException e) {
+                System.err.println("Erreur lors de l'export CSV : " + e.getMessage());
+            }
+        } else {
+            System.out.println("Aucune transaction à exporter.");
+        }
 
     }
 

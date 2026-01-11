@@ -6,5 +6,10 @@ public class Avoir implements Transaction {
     public Avoir(TransactionInfo transactionInfo) {
         this.transactionInfo = transactionInfo;
     }
+
+    @Override
+    public TransactionInfo getTransactionInfo() {
+        return transactionInfo;
+    }
 }
 

@@ -6,5 +6,10 @@ public class Interets implements Transaction {
     public Interets(TransactionInfo transactionInfo) {
         this.transactionInfo = transactionInfo;
     }
+
+    @Override
+    public TransactionInfo getTransactionInfo() {
+        return transactionInfo;
+    }
 }
 
