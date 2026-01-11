@@ -1,5 +1,6 @@
 package org.denhez;
 
+import org.denhez.pdf.domain.Transaction;
 import org.denhez.pdf.domain.TransactionInfo;
 import org.denhez.pdf.domain.TransactionType;
 import org.denhez.pdf.domain.vo.PositiveAmount;
@@ -8,6 +9,8 @@ import org.denhez.pdf.tool.reader.PdfReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static org.denhez.pdf.domain.Transaction.parseAvoir;
 
 
 public class Main {
@@ -25,7 +28,16 @@ public class Main {
         var path = definePDFInput(new File("."));
         var pdfText = pdfReader.read(path);
 
-        Deque<String> pdfAsDeque = new ArrayDeque<>(Arrays.asList(pdfText.split("\n")));
+        // Normaliser les espaces insécables en espaces normaux
+        pdfText = pdfText.replace("\u00A0", " ");
+
+        Iterator<String> pdfIterator = Arrays.asList(pdfText.split("\n")).iterator();
+        final List<Transaction> transactions = new ArrayList<>();
+        while (pdfIterator.hasNext()) {
+            parseAvoir(pdfIterator.next()).map(transactions::add);
+        }
+
+        System.out.println(transactions.size());
 
     }
 
