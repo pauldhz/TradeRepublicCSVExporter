@@ -4,6 +4,7 @@ import org.denhez.pdf.domain.vo.PositiveAmount;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface Transaction {
 
@@ -22,8 +23,36 @@ public interface Transaction {
         return parseTransaction(row, "Intérêts", TransactionType.CREDIT, Interets::new);
     }
 
-    static Optional<Transaction> ExecutionOrdre(String row) {
-        return null;
+    static Optional<Transaction> parseExecutionOrdre(String row, Supplier<String> nextLineSupplier) {
+        if (row == null || !row.equals("Exécution ")) {
+            return Optional.empty();
+        }
+
+        try {
+            // Lire la ligne suivante "d'ordre"
+            String nextLine = nextLineSupplier.get();
+            if (nextLine == null || !nextLine.equals("d'ordre")) {
+                return Optional.empty();
+            }
+
+            // Lire les lignes de description jusqu'à trouver la ligne avec les montants
+            String line;
+            while ((line = nextLineSupplier.get()) != null) {
+                String[] parts = line.split(" ");
+
+                // On cherche une ligne avec exactement 4 parties: montant, €, solde, €
+                if (parts.length == 4 && parts[1].equals("€") && parts[3].equals("€")) {
+                    String montantStr = parts[0].replace(",", ".");
+                    PositiveAmount amount = PositiveAmount.parse(montantStr);
+                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT);
+                    return Optional.of(new ExecutionOrdre(info));
+                }
+            }
+
+            return Optional.empty();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     static Optional<Transaction> parseVirement(String row) {
