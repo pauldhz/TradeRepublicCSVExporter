@@ -5,7 +5,7 @@ import org.denhez.pdf.domain.statement.Bonus;
 import org.denhez.pdf.domain.statement.ExecutionOrdre;
 import org.denhez.pdf.domain.statement.Interets;
 import org.denhez.pdf.domain.vo.PositiveAmount;
-import org.denhez.pdf.domain.vo.Virement;
+import org.denhez.pdf.domain.statement.Virement;
 
 import java.util.Date;
 import java.util.Optional;
@@ -22,6 +22,8 @@ public interface Transaction {
      * @return les informations de la transaction
      */
     TransactionInfo getTransactionInfo();
+
+    void setTransactionInfo(TransactionInfo transactionInfo);
 
     static Optional<Transaction> parseAvoir(String row, Date operationDate) {
         return parseTransaction(row, "Avoir", TransactionType.DEBIT, Avoir::new, operationDate);
@@ -55,14 +57,14 @@ public interface Transaction {
                     String montantStr = parts[0].replace(",", ".");
                     PositiveAmount amount = PositiveAmount.parse(montantStr);
                     String description = descriptionBuilder.toString().trim();
-                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT, description, operationDate);
+                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT, description, operationDate, null);
                     return Optional.of(new ExecutionOrdre(info));
                 }
                 else if (parts.length >= 8 && parts[0].equals("Buy") && parts[1].equals("trade")) {
                     String montantStr = parts[8].replace(",", ".");
                     PositiveAmount amount = PositiveAmount.parse(montantStr);
                     String description = descriptionBuilder.toString().trim();
-                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT, description, operationDate);
+                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT, description, operationDate, null);
                     return Optional.of(new ExecutionOrdre(info));
                 }
 
@@ -99,7 +101,7 @@ public interface Transaction {
                     String montantStr = parts[0].replace(",", ".");
                     PositiveAmount amount = PositiveAmount.parse(montantStr);
                     String description = descriptionBuilder.toString().trim();
-                    TransactionInfo info = new TransactionInfo(amount, TransactionType.CREDIT, description, operationDate);
+                    TransactionInfo info = new TransactionInfo(amount, TransactionType.CREDIT, description, operationDate, null);
                     return Optional.of(new Virement(info));
                 }
 
@@ -143,7 +145,7 @@ public interface Transaction {
 
         try {
             PositiveAmount amount = PositiveAmount.parse(montantStr);
-            TransactionInfo info = new TransactionInfo(amount, type, description, operationDate);
+            TransactionInfo info = new TransactionInfo(amount, type, description, operationDate, null);
             return Optional.of(factory.apply(info));
         } catch (Exception e) {
             return Optional.empty();

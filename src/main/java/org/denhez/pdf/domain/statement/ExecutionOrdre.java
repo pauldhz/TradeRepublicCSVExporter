@@ -14,5 +14,10 @@ public class ExecutionOrdre implements Transaction {
     public TransactionInfo getTransactionInfo() {
         return transactionInfo;
     }
+
+    @Override
+    public void setTransactionInfo(TransactionInfo transactionInfo) {
+        this.transactionInfo = transactionInfo;
+    }
 }
 

@@ -1,6 +1,9 @@
 package org.denhez;
 
 import org.denhez.pdf.domain.report.Transaction;
+import org.denhez.pdf.domain.report.categorization.Categorization;
+import org.denhez.pdf.domain.report.categorization.RetrieveCategorization;
+import org.denhez.pdf.domain.report.categorization.prediction.RetrievePredictedCategorization;
 import org.denhez.pdf.tool.exporter.CsvExporter;
 import org.denhez.pdf.tool.reader.PdfReader;
 
@@ -10,11 +13,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static org.denhez.ConfigLoader.PREDICT_URL;
 import static org.denhez.pdf.domain.report.Transaction.*;
 
 
 public class Main {
     public static void main(String[] args) throws IOException {
+
+        ConfigLoader configLoader = new ConfigLoader();
+        RetrieveCategorization retrieveCategorization =
+                new RetrievePredictedCategorization(configLoader.getConfig().get(PREDICT_URL));
 
         final String output;
         if(args.length > 0) {
@@ -45,11 +53,18 @@ public class Main {
             // Essayer de parser la date à partir des 2 lignes précédentes
             Date operationDate = parseDate(lineMinus2, lineMinus1);
 
+
+
             parseAvoir(row, operationDate)
                 .or(() -> parseBonus(row, operationDate))
                 .or(() -> parseInterets(row, operationDate))
                 .or(() -> parseExecutionOrdre(row, pdfIterator::next, operationDate))
                 .or(() -> parseVirement(row, pdfIterator::next, operationDate))
+                .map(transaction -> {
+                    Categorization categorization = retrieveCategorization.getCategory(transaction.getTransactionInfo());
+                    transaction.setTransactionInfo(transaction.getTransactionInfo().withCategorization(categorization));
+                    return transaction;
+                })
                 .ifPresent(transactions::add);
 
             // Décaler les lignes pour la prochaine itération

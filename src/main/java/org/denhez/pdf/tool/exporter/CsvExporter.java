@@ -6,7 +6,7 @@ import org.denhez.pdf.domain.statement.Avoir;
 import org.denhez.pdf.domain.statement.Bonus;
 import org.denhez.pdf.domain.statement.ExecutionOrdre;
 import org.denhez.pdf.domain.statement.Interets;
-import org.denhez.pdf.domain.vo.Virement;
+import org.denhez.pdf.domain.statement.Virement;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
