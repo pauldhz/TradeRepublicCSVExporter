@@ -1,6 +1,12 @@
 package org.denhez.pdf.tool.exporter;
 
-import org.denhez.pdf.domain.*;
+import org.denhez.pdf.domain.report.Transaction;
+import org.denhez.pdf.domain.report.TransactionInfo;
+import org.denhez.pdf.domain.statement.Avoir;
+import org.denhez.pdf.domain.statement.Bonus;
+import org.denhez.pdf.domain.statement.ExecutionOrdre;
+import org.denhez.pdf.domain.statement.Interets;
+import org.denhez.pdf.domain.vo.Virement;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

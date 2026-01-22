@@ -1,4 +1,4 @@
-package org.denhez.pdf.domain;
+package org.denhez.pdf.domain.report;
 
 import org.denhez.pdf.domain.vo.PositiveAmount;
 

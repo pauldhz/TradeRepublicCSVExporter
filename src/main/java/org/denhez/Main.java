@@ -1,6 +1,6 @@
 package org.denhez;
 
-import org.denhez.pdf.domain.Transaction;
+import org.denhez.pdf.domain.report.Transaction;
 import org.denhez.pdf.tool.exporter.CsvExporter;
 import org.denhez.pdf.tool.reader.PdfReader;
 
@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.denhez.pdf.domain.Transaction.*;
+import static org.denhez.pdf.domain.report.Transaction.*;
 
 
 public class Main {

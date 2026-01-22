@@ -1,6 +1,11 @@
-package org.denhez.pdf.domain;
+package org.denhez.pdf.domain.report;
 
+import org.denhez.pdf.domain.statement.Avoir;
+import org.denhez.pdf.domain.statement.Bonus;
+import org.denhez.pdf.domain.statement.ExecutionOrdre;
+import org.denhez.pdf.domain.statement.Interets;
 import org.denhez.pdf.domain.vo.PositiveAmount;
+import org.denhez.pdf.domain.vo.Virement;
 
 import java.util.Date;
 import java.util.Optional;
