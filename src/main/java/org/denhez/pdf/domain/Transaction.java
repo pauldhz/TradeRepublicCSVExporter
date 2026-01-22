@@ -53,6 +53,13 @@ public interface Transaction {
                     TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT, description, operationDate);
                     return Optional.of(new ExecutionOrdre(info));
                 }
+                else if (parts.length >= 8 && parts[0].equals("Buy") && parts[1].equals("trade")) {
+                    String montantStr = parts[8].replace(",", ".");
+                    PositiveAmount amount = PositiveAmount.parse(montantStr);
+                    String description = descriptionBuilder.toString().trim();
+                    TransactionInfo info = new TransactionInfo(amount, TransactionType.DEBIT, description, operationDate);
+                    return Optional.of(new ExecutionOrdre(info));
+                }
 
                 // Accumuler la description
                 if (!descriptionBuilder.isEmpty()) {
