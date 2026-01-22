@@ -1,0 +1,23 @@
+parsing:
+  max-lines: 20
+  date-format: "dd MMM yyyy"
+  locale: "fr_FR"
+
+export:
+  default-output: "export.csv"
+  encoding: "UTF-8"
+  delimiter: ","
+
+pdf:
+  accepted-extensions:
+    - ".pdf"
+  normalize:
+    replace-nbsp: true
+    remove-null: true
+
+logging:
+  level:
+    root: INFO
+    org.denhez: DEBUG
+
+categorization-api.url: "http://localhost:8000/predict"
