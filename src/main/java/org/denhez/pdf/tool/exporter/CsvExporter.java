@@ -17,10 +17,10 @@ import java.util.List;
 /**
  * Classe responsable de l'export des transactions au format CSV
  */
-public class CsvExporter {
+public class CsvExporter implements Exporter {
 
     private static final String CSV_SEPARATOR = ";";
-    private static final String CSV_HEADER = "Date;Type;Description;Montant;Sens";
+    private static final String CSV_HEADER = "Date;Type;Description;Montant;Sens;Category;Subcategory";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
@@ -69,7 +69,11 @@ public class CsvExporter {
         // Sens (DEBIT ou CREDIT)
         String sens = info.transactionType() != null ? info.transactionType().name() : "";
 
-        return String.join(CSV_SEPARATOR, date, type, description, montant, sens);
+        String category = info.categorization() == null ? "" : info.categorization().category();
+
+        String subcategory = info.categorization() == null ? "" : info.categorization().subcategory();
+
+        return String.join(CSV_SEPARATOR, date, type, description, montant, sens, category, subcategory);
     }
 
     /**

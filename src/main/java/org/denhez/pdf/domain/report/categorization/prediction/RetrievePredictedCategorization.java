@@ -34,7 +34,7 @@ public class RetrievePredictedCategorization implements RetrieveCategorization {
             );
 
             PredictionResponse response = predictionHttpClient.predict(request);
-            return new Categorization(response.category(), response.subcategory());
+            return new Categorization(response.category(), response.subcategory(), response.confidence());
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors de la prédiction de catégorie", e);
         }
